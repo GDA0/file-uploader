@@ -115,8 +115,18 @@ function controlLogInGet(req, res) {
   res.render("log-in", { title: "Log in", user: null });
 }
 
+function controlLogOutGet(req, res) {
+  req.logout((error) => {
+    if (error) {
+      return next(error);
+    }
+    res.redirect("/");
+  });
+}
+
 module.exports = {
   controlSignUpGet,
   controlSignUpPost,
   controlLogInGet,
+  controlLogOutGet,
 };

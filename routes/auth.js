@@ -22,4 +22,7 @@ router.post(
   })
 );
 
+// Log-out route
+router.get("/log-out", authController.controlLogOutGet);
+
 module.exports = router;
