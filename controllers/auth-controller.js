@@ -3,7 +3,12 @@ const bcrypt = require("bcryptjs");
 const database = require("../database");
 
 function controlSignUpGet(req, res) {
-  res.render("sign-up", { errors: [], formData: {} });
+  res.render("sign-up", {
+    title: "Sign up",
+    user: null,
+    errors: [],
+    formData: {},
+  });
 }
 
 const controlSignUpPost = [
@@ -47,6 +52,8 @@ const controlSignUpPost = [
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.render("sign-up", {
+        title: "Sign up",
+        user: null,
         errors: errors.array(),
         formData: req.body,
       });
@@ -58,6 +65,8 @@ const controlSignUpPost = [
 
       if (usernameExists) {
         return res.render("sign-up", {
+          title: "Sign up",
+          user: null,
           errors: [{ msg: "Username is already taken" }],
           formData: req.body,
         });
@@ -76,6 +85,8 @@ const controlSignUpPost = [
         if (error) {
           console.error("Error during auto login:", error);
           return res.render("sign-up", {
+            title: "Sign up",
+            user: null,
             errors: [
               {
                 msg: "Sign-up successful, but an error occurred during auto login. Please log in manually.",
@@ -89,6 +100,8 @@ const controlSignUpPost = [
     } catch (error) {
       console.error("Error during user sign-up:", error);
       return res.render("sign-up", {
+        title: "Sign up",
+        user: null,
         errors: [
           { msg: "An error occurred during sign-up. Please try again later." },
         ],
@@ -99,7 +112,7 @@ const controlSignUpPost = [
 ];
 
 function controlLogInGet(req, res) {
-  res.render("log-in");
+  res.render("log-in", { title: "Log in", user: null });
 }
 
 module.exports = {
