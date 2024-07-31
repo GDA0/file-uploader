@@ -5,7 +5,7 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const engine = require("ejs-mate");
 const session = require("express-session");
-const PrismaSessionStore = require("@quixo3/prisma-session-store");
+const { PrismaSessionStore } = require("@quixo3/prisma-session-store");
 const { PrismaClient } = require("@prisma/client");
 const passport = require("passport");
 require("dotenv").config();
