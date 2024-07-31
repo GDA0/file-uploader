@@ -3,6 +3,16 @@
 <div class="mx-auto" style="max-width: 540px">
   <h2 class="text-center">Sign Up</h2>
 
+  <% if (errors && errors.length > 0) { %>
+  <div class="alert alert-danger">
+    <ul class="mb-0">
+      <% errors.forEach((error) => { %>
+      <li><%= error.msg %></li>
+      <% }) %>
+    </ul>
+  </div>
+  <% } %>
+
   <form class="my-3" action="/sign-up" method="post">
     <div class="mb-3 row">
       <div class="col">
@@ -12,17 +22,30 @@
           class="form-control"
           id="firstName"
           name="firstName"
+          value="<%- formData ? formData.firstName : '' %>"
           autofocus
         />
       </div>
       <div class="col">
         <label for="lastName" class="form-label">Last name</label>
-        <input type="text" class="form-control" id="lastName" name="lastName" />
+        <input
+          type="text"
+          class="form-control"
+          id="lastName"
+          name="lastName"
+          value="<%- formData ? formData.lastName : '' %>"
+        />
       </div>
     </div>
     <div class="mb-3">
       <label for="username" class="form-label">Username</label>
-      <input type="text" class="form-control" id="username" name="username" />
+      <input
+        type="text"
+        class="form-control"
+        id="username"
+        name="username"
+        value="<%- formData ? formData.username : '' %>"
+      />
     </div>
     <div class="mb-3">
       <label for="password" class="form-label">Password</label>
@@ -31,6 +54,7 @@
         class="form-control"
         id="password"
         name="password"
+        value="<%= formData ? formData.password : '' %>"
         autocomplete="new-password"
       />
     </div>
@@ -41,6 +65,7 @@
         class="form-control"
         id="confirmPassword"
         name="confirmPassword"
+        value="<%= formData ? formData.confirmPassword : '' %>"
         autocomplete="new-password"
       />
     </div>
