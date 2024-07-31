@@ -3,6 +3,16 @@
 <div class="mx-auto" style="max-width: 540px">
   <h2 class="text-center">Log In</h2>
 
+  <% if (hasMessages) { %>
+  <div class="alert alert-danger">
+    <ul class="mb-0">
+      <% messages.forEach((message) => { %>
+      <li><%= message %></li>
+      <% }) %>
+    </ul>
+  </div>
+  <% } %>
+
   <form class="my-3" action="/log-in" method="post">
     <div class="mb-3">
       <label for="username" class="form-label">Username</label>
