@@ -1,0 +1,52 @@
+<% layout('layout') %>
+
+<div class="mx-auto" style="max-width: 540px">
+  <h2 class="text-center">Sign Up</h2>
+
+  <form class="my-3" action="/sign-up" method="post">
+    <div class="mb-3 row">
+      <div class="col">
+        <label for="firstName" class="form-label">First name</label>
+        <input
+          type="text"
+          class="form-control"
+          id="firstName"
+          name="firstName"
+          autofocus
+        />
+      </div>
+      <div class="col">
+        <label for="lastName" class="form-label">Last name</label>
+        <input type="text" class="form-control" id="lastName" name="lastName" />
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="username" class="form-label">Username</label>
+      <input type="text" class="form-control" id="username" name="username" />
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input
+        type="password"
+        class="form-control"
+        id="password"
+        name="password"
+        autocomplete="new-password"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="confirmPassword" class="form-label">Confirm password</label>
+      <input
+        type="password"
+        class="form-control"
+        id="confirmPassword"
+        name="confirmPassword"
+        autocomplete="new-password"
+      />
+    </div>
+    <button type="submit" class="btn btn-primary">Sign Up</button>
+  </form>
+  <p class="text-center">
+    Already have an account? <a href="/log-in">Log in</a>
+  </p>
+</div>
