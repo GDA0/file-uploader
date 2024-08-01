@@ -53,7 +53,7 @@ app.use(flash());
 // Message handling middleware
 app.use((req, res, next) => {
   const messages = req.session.messages || [];
-  res.locals.messages = messages;
+  res.locals.logInMessages = messages;
   res.locals.hasMessages = messages.length > 0;
   req.session.messages = [];
   next();
