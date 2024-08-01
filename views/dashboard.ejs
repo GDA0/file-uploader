@@ -1,0 +1,24 @@
+<% layout('layout') %>
+
+<div class="d-flex h-100 border rounded">
+  <div
+    class="sidebar bg-light bottom-0 top-0 overflow-y-auto overflow-x-hidden rounded-start p-3 d-flex flex-column justify-content-between"
+    style="min-width: 240px"
+  >
+    <div class="btn btn-light w-100 d-flex">
+      <span class="fs-5"><i class="bi bi-house"></i> Home</span>
+    </div>
+    <form
+      action="/dashboard/upload-file"
+      method="post"
+      enctype="multipart/form-data"
+      style="max-width: 240px"
+    >
+      <div class="mb-3">
+        <input class="form-control" type="file" id="file" required />
+      </div>
+      <button class="btn btn-primary w-100" type="submit">Upload</button>
+    </form>
+  </div>
+  <div class="flex-grow-1"></div>
+</div>
