@@ -9,16 +9,51 @@
       <span class="fs-5"><i class="bi bi-house"></i> Home</span>
     </div>
     <form
-      action="/dashboard/upload-file"
+      action="/dashboard/upload"
       method="post"
       enctype="multipart/form-data"
       style="max-width: 240px"
     >
       <div class="mb-3">
-        <input class="form-control" type="file" id="file" required />
+        <input
+          class="form-control"
+          type="file"
+          id="file"
+          name="file"
+          required
+        />
       </div>
       <button class="btn btn-primary w-100" type="submit">Upload</button>
     </form>
   </div>
-  <div class="flex-grow-1"></div>
+  <div class="flex-grow-1 p-3">
+    <% if (messages.success) { %>
+    <div
+      id="success-alert"
+      class="alert alert-success alert-dismissible fade show mx-auto"
+      role="alert"
+      style="max-width: max-content"
+    >
+      <%= messages.success %>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    <% } %>
+  </div>
 </div>
+
+<script>
+  // Automatically close the alert after 5 seconds
+  setTimeout(() => {
+    const alert = document.getElementById("success-alert");
+    if (alert) {
+      alert.classList.remove("show");
+      alert.classList.add("fade");
+      setTimeout(() => alert.remove(), 150);
+    }
+  }, 5000);
+</script>
