@@ -105,6 +105,21 @@ async function createFile(name, path, folderId, size) {
   }
 }
 
+async function createFolder(name, userId, parentId) {
+  try {
+    await prisma.folder.create({
+      data: {
+        name,
+        userId,
+        parentId,
+      },
+    });
+  } catch (error) {
+    console.error("Error creating folder:", error);
+    throw error;
+  }
+}
+
 module.exports = {
   createUser,
   checkUsernameExists,
@@ -112,4 +127,5 @@ module.exports = {
   createDefaultFolder,
   findFolder,
   createFile,
+  createFolder,
 };

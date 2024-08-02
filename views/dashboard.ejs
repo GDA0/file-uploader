@@ -24,7 +24,7 @@
             required
           />
         </div>
-        <button class="btn btn-primary w-100" type="submit">Upload</button>
+        <button class="btn btn-primary w-100" type="submit">Upload file</button>
       </form>
 
       <button
@@ -100,7 +100,10 @@
           ></button>
         </div>
         <div class="modal-body">
-          <form action="/dashboard/folders/<%= folder.id %>/create">
+          <form
+            action="/dashboard/folders/<%= folder.id %>/create"
+            method="post"
+          >
             <div class="mb-3">
               <label for="name" class="form-label">Name</label>
               <input

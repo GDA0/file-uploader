@@ -16,19 +16,25 @@ const upload = multer({ storage });
 const dashboardController = require("../controllers/dashboard");
 const checkAuthentication = require("../checkAuthentication");
 
-router.get("/", checkAuthentication, dashboardController.controlDashboardGet);
+router.get("/", checkAuthentication, dashboardController.handleDashboardGet);
 
 router.post(
   "/folders/:folderId/upload",
   checkAuthentication,
   upload.single("file"),
-  dashboardController.controlUploadPost
+  dashboardController.handleUploadPost
 );
 
 router.get(
   "/folders/:folderId",
   checkAuthentication,
-  dashboardController.controlFolderGet
+  dashboardController.handleFolderGet
+);
+
+router.post(
+  "/folders/:folderId/create",
+  checkAuthentication,
+  dashboardController.handleCreatePost
 );
 
 module.exports = router;
