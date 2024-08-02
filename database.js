@@ -55,8 +55,23 @@ async function findUser(method, value) {
   }
 }
 
+async function createDefaultFolder(userId) {
+  try {
+    await prisma.folder.create({
+      data: {
+        name: "Home",
+        userId,
+      },
+    });
+  } catch (error) {
+    console.error("Error creating default folder:", error);
+    throw error;
+  }
+}
+
 module.exports = {
   createUser,
   checkUsernameExists,
   findUser,
+  createDefaultFolder,
 };

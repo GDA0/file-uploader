@@ -81,6 +81,9 @@ const controlSignUpPost = [
         hashedPassword
       );
 
+      // Create a default folder for new users
+      database.createDefaultFolder(user.id);
+
       req.login(user, (error) => {
         if (error) {
           console.error("Error during auto login:", error);
