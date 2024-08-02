@@ -25,4 +25,10 @@ router.post(
   dashboardController.controlUploadPost
 );
 
+router.get(
+  "/folders/:folderId",
+  checkAuthentication,
+  dashboardController.controlFolderGet
+);
+
 module.exports = router;

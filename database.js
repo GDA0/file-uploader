@@ -69,9 +69,30 @@ async function createDefaultFolder(userId) {
   }
 }
 
+async function findFolder(folderId) {
+  try {
+    const folder = await prisma.folder.findUnique({
+      where: {
+        id: folderId,
+      },
+      include: {
+        subfolders: true,
+        files: true,
+        parent: true,
+      },
+    });
+
+    return folder;
+  } catch (error) {
+    console.error(`Error finding folder with ID ${folderId}:`, error);
+    throw error;
+  }
+}
+
 module.exports = {
   createUser,
   checkUsernameExists,
   findUser,
   createDefaultFolder,
+  findFolder,
 };
