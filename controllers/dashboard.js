@@ -1,6 +1,8 @@
 const database = require("../database");
 const formatSize = require("../utilities/format-size");
 const formatPath = require("../utilities/format-path");
+const sortFolderContents = require("../utilities/sort-folder-contents");
+const formatUpdatedAt = require("../utilities/format-updatedAt");
 
 async function controlDashboardGet(req, res) {
   res.redirect("/dashboard/folders/1");
@@ -20,15 +22,29 @@ async function controlFolderGet(req, res) {
   const { folderId } = req.params;
   const folder = await database.findFolder(+folderId);
 
-  // Format file sizes
-  if (folder.files) {
+  // Format file sizes and updatedAt
+  if (folder.files.length) {
     folder.files = folder.files.map((file) => ({
       ...file,
       formattedSize: formatSize(file.size),
+      formattedUpdatedAt: formatUpdatedAt(file.updatedAt),
     }));
   }
 
-  res.render("dashboard", { title: "Folder", user: req.user, folder });
+  if (folder.subfolders.length) {
+    folder.subfolders = folder.subfolders.map((subfolder) => ({
+      ...subfolder,
+      formattedUpdatedAt: formatUpdatedAt(subfolder.updatedAt),
+    }));
+  }
+
+  const sortedFolder = sortFolderContents(folder);
+
+  res.render("dashboard", {
+    title: "Folder",
+    user: req.user,
+    folder: sortedFolder,
+  });
 }
 
 module.exports = {
