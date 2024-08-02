@@ -1,8 +1,5 @@
-function controlDashboardGet(req, res) {
-  res.render("dashboard", {
-    title: "Dashboard",
-    user: req.user,
-  });
+async function controlDashboardGet(req, res) {
+  res.redirect("/dashboard/folders/1");
 }
 
 function controlUploadPost(req, res) {
