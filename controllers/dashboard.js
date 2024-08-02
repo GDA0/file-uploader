@@ -19,7 +19,15 @@ async function handleUploadPost(req, res) {
     const { folderId } = req.params;
     const formattedPath = formatPath(path);
 
-    await database.createFile(originalname, formattedPath, +folderId, size);
+    const filenameExists = await database.checkFilenameExist(
+      originalname,
+      +folderId
+    );
+
+    if (!filenameExists) {
+      await database.createFile(originalname, formattedPath, +folderId, size);
+    }
+
     res.redirect(`/dashboard/folders/${folderId}`);
   } catch (error) {
     console.error("Error uploading file:", error);
@@ -66,7 +74,15 @@ async function handleCreatePost(req, res) {
     const { name } = req.body;
     const { folderId } = req.params;
 
-    await database.createFolder(name, req.user.id, +folderId);
+    const foldernameExists = await database.checkFoldernameExist(
+      name,
+      +folderId
+    );
+
+    if (!foldernameExists) {
+      await database.createFolder(name, req.user.id, +folderId);
+    }
+
     res.redirect(`/dashboard/folders/${folderId}`);
   } catch (error) {
     console.error("Error creating folder:", error);

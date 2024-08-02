@@ -2,13 +2,10 @@
 
 <div class="d-flex h-100 border rounded">
   <div
-    class="sidebar bg-light bottom-0 top-0 overflow-y-auto overflow-x-hidden rounded-start p-3 d-flex flex-column justify-content-between"
+    class="sidebar bg-light bottom-0 top-0 overflow-y-auto overflow-x-hidden rounded-start p-3 d-flex flex-column"
     style="min-width: 240px"
   >
-    <a href="/dashboard/folders/1" class="btn btn-light w-100 d-flex">
-      <span class="fs-5"><i class="bi bi-house"></i> Home</span>
-    </a>
-    <div>
+    <div class="mt-auto">
       <form
         action="/dashboard/folders/<%= folder.id %>/upload"
         method="post"
@@ -23,8 +20,14 @@
             name="file"
             required
           />
+          <div class="form-text">
+            <small
+              ><i class="bi bi-info-circle me-1"></i>File names already in this
+              folder won't be created.</small
+            >
+          </div>
         </div>
-        <button class="btn btn-primary w-100" type="submit">Upload file</button>
+        <button class="btn btn-primary w-100" type="submit">Upload File</button>
       </form>
 
       <button
@@ -113,6 +116,10 @@
                 name="name"
                 required
               />
+              <div class="form-text">
+                <i class="bi bi-info-circle me-1"></i>Folder names already in
+                this folder won't be created.
+              </div>
             </div>
             <button class="btn btn-primary" type="submit">Create folder</button>
           </form>

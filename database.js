@@ -120,6 +120,30 @@ async function createFolder(name, userId, parentId) {
   }
 }
 
+async function checkFilenameExist(name, folderId) {
+  try {
+    const file = await prisma.file.findFirst({
+      where: { name, folderId },
+    });
+    return file !== null;
+  } catch (error) {
+    console.error("Error checking file existence:", error);
+    throw error;
+  }
+}
+
+async function checkFoldernameExist(name, parentId) {
+  try {
+    const folder = await prisma.folder.findFirst({
+      where: { name, parentId },
+    });
+    return folder !== null;
+  } catch (error) {
+    console.error("Error checking folder existence:", error);
+    throw error;
+  }
+}
+
 module.exports = {
   createUser,
   checkUsernameExists,
@@ -128,4 +152,6 @@ module.exports = {
   findFolder,
   createFile,
   createFolder,
+  checkFilenameExist,
+  checkFoldernameExist,
 };
