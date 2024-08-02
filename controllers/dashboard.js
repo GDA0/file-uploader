@@ -1,13 +1,19 @@
 const database = require("../database");
 const formatSize = require("../utilities/format-size");
+const formatPath = require("../utilities/format-path");
 
 async function controlDashboardGet(req, res) {
   res.redirect("/dashboard/folders/1");
 }
 
 function controlUploadPost(req, res) {
-  req.flash("success", "File uploaded successfully");
-  res.redirect("/dashboard");
+  const { originalname, path, size } = req.file;
+  const { folderId } = req.params;
+  const formattedPath = formatPath(path);
+
+  database.createFile(originalname, formattedPath, +folderId, size);
+
+  res.redirect(`/dashboard/folders/${folderId}`);
 }
 
 async function controlFolderGet(req, res) {

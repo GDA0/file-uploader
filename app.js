@@ -8,7 +8,6 @@ const session = require("express-session");
 const { PrismaSessionStore } = require("@quixo3/prisma-session-store");
 const { PrismaClient } = require("@prisma/client");
 const passport = require("passport");
-const flash = require("express-flash");
 require("dotenv").config();
 
 const indexRouter = require("./routes/index");
@@ -48,7 +47,6 @@ app.use(
   })
 );
 app.use(passport.session());
-app.use(flash());
 
 // Message handling middleware
 app.use((req, res, next) => {

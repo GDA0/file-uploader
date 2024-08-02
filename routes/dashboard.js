@@ -19,7 +19,7 @@ const checkAuthentication = require("../checkAuthentication");
 router.get("/", checkAuthentication, dashboardController.controlDashboardGet);
 
 router.post(
-  "/upload",
+  "/folders/:folderId/upload",
   checkAuthentication,
   upload.single("file"),
   dashboardController.controlUploadPost
