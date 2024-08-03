@@ -6,7 +6,8 @@ const formatUpdatedAt = require("../utilities/format-updatedAt");
 
 async function handleDashboardGet(req, res) {
   try {
-    res.redirect("/dashboard/folders/1");
+    const homeFolderId = await database.findHomeFolderId(req.user.id);
+    res.redirect(`/dashboard/folders/${homeFolderId}`);
   } catch (error) {
     console.error("Error redirecting to dashboard:", error);
     res.status(500).send("Internal Server Error");

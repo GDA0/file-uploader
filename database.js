@@ -55,7 +55,7 @@ async function findUser(method, value) {
   }
 }
 
-async function createDefaultFolder(userId) {
+async function createHomeFolder(userId) {
   try {
     await prisma.folder.create({
       data: {
@@ -156,14 +156,31 @@ async function checkFoldernameExist(name, parentId) {
   }
 }
 
+async function findHomeFolderId(userId) {
+  try {
+    const homeFolder = await prisma.folder.findFirst({
+      where: {
+        userId,
+        parentId: null,
+      },
+    });
+
+    return homeFolder.id;
+  } catch (error) {
+    console.error("Error finding home folder:", error);
+    throw error;
+  }
+}
+
 module.exports = {
   createUser,
   checkUsernameExists,
   findUser,
-  createDefaultFolder,
+  createHomeFolder,
   findFolder,
   createFile,
   createFolder,
   checkFilenameExist,
   checkFoldernameExist,
+  findHomeFolderId,
 };

@@ -82,7 +82,7 @@ const controlSignUpPost = [
       );
 
       // Create a default folder for new users
-      await database.createDefaultFolder(user.id);
+      await database.createHomeFolder(user.id);
 
       req.login(user, (error) => {
         if (error) {
