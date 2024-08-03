@@ -172,6 +172,28 @@ async function findHomeFolderId(userId) {
   }
 }
 
+async function findFolderUserId(folderId) {
+  try {
+    const folder = await prisma.folder.findUnique({
+      where: {
+        id: folderId,
+      },
+      select: {
+        userId: true,
+      },
+    });
+
+    if (!folder) {
+      throw new Error(`Folder with ID ${folderId} not found`);
+    }
+
+    return folder.userId;
+  } catch (error) {
+    console.error("Error finding userId for folder:", error);
+    throw error;
+  }
+}
+
 module.exports = {
   createUser,
   checkUsernameExists,
@@ -183,4 +205,5 @@ module.exports = {
   checkFilenameExist,
   checkFoldernameExist,
   findHomeFolderId,
+  findFolderUserId,
 };

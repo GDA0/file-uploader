@@ -3,7 +3,7 @@ const router = express.Router();
 const passport = require("passport");
 
 const authController = require("../controllers/auth");
-const configurePassport = require("../configure-passport");
+const configurePassport = require("../utilities/configure-passport");
 
 configurePassport(passport);
 

@@ -14,13 +14,17 @@ const router = express.Router();
 const upload = multer({ storage });
 
 const dashboardController = require("../controllers/dashboard");
-const checkAuthentication = require("../checkAuthentication");
+const {
+  checkAuthentication,
+  checkAuthorization,
+} = require("../utilities/auth");
 
 router.get("/", checkAuthentication, dashboardController.handleDashboardGet);
 
 router.post(
   "/folders/:folderId/upload",
   checkAuthentication,
+  checkAuthorization,
   upload.single("file"),
   dashboardController.handleUploadPost
 );
@@ -28,12 +32,14 @@ router.post(
 router.get(
   "/folders/:folderId",
   checkAuthentication,
+  checkAuthorization,
   dashboardController.handleFolderGet
 );
 
 router.post(
   "/folders/:folderId/create",
   checkAuthentication,
+  checkAuthorization,
   dashboardController.handleCreatePost
 );
 

@@ -1,6 +1,6 @@
 const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
-const database = require("../database");
+const database = require("../utilities/database");
 
 function controlSignUpGet(req, res) {
   res.render("sign-up", {

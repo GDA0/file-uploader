@@ -1,4 +1,4 @@
-const database = require("../database");
+const database = require("../utilities/database");
 const formatSize = require("../utilities/format-size");
 const formatPath = require("../utilities/format-path");
 const sortFolderContents = require("../utilities/sort-folder-contents");
