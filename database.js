@@ -78,7 +78,19 @@ async function findFolder(folderId) {
       include: {
         subfolders: true,
         files: true,
-        parent: true,
+        parent: {
+          include: {
+            parent: {
+              include: {
+                parent: {
+                  include: {
+                    parent: true,
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     });
 

@@ -40,6 +40,17 @@ async function handleFolderGet(req, res) {
     const { folderId } = req.params;
     const folder = await database.findFolder(+folderId);
 
+    // Create breadcrumb path
+    let breadcrumbs = [];
+    let currentFolder = folder;
+    while (currentFolder) {
+      breadcrumbs.unshift({
+        name: currentFolder.name,
+        id: currentFolder.id,
+      });
+      currentFolder = currentFolder.parent;
+    }
+
     // Format file sizes and updatedAt
     if (folder.files.length) {
       folder.files = folder.files.map((file) => ({
@@ -62,6 +73,7 @@ async function handleFolderGet(req, res) {
       title: "Folder",
       user: req.user,
       folder: sortedFolder,
+      breadcrumbs,
     });
   } catch (error) {
     console.error("Error finding folder:", error);

@@ -40,7 +40,24 @@
       </button>
     </div>
   </div>
+
   <div class="flex-grow-1 p-3">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '》'">
+      <ol class="breadcrumb">
+        <% breadcrumbs.forEach((crumb, index) => { %> <% if (index ===
+        breadcrumbs.length - 1) { %>
+        <li class="breadcrumb-item active" aria-current="page">
+          <%= crumb.name %>
+        </li>
+        <% } else { %>
+        <li class="breadcrumb-item">
+          <a href="/dashboard/folders/<%= crumb.id %>"><%= crumb.name %></a>
+        </li>
+        <% } %> <% }) %>
+      </ol>
+    </nav>
+
     <h5><%= folder.name %></h5>
 
     <% if (folder.subfolders.length || folder.files.length) { %>
@@ -128,15 +145,3 @@
     </div>
   </div>
 </div>
-
-<script>
-  // Automatically close the alert after 5 seconds
-  setTimeout(() => {
-    const alert = document.getElementById("success-alert");
-    if (alert) {
-      alert.classList.remove("show");
-      alert.classList.add("fade");
-      setTimeout(() => alert.remove(), 150);
-    }
-  }, 5000);
-</script>
