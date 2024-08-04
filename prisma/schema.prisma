@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid())
   firstName String
   lastName  String
   username  String   @unique
@@ -17,18 +17,18 @@ model User {
 }
 
 model Session {
-  id        String   @id
+  id        String   @id @default(uuid())
   sid       String   @unique
   data      String
   expiresAt DateTime
 }
 
 model Folder {
-  id         Int         @id @default(autoincrement())
+  id         String      @id @default(uuid())
   name       String
-  userId     Int
+  userId     String
   user       User        @relation(fields: [userId], references: [id])
-  parentId   Int?
+  parentId   String?
   parent     Folder?     @relation("Subfolders", fields: [parentId], references: [id])
   subfolders Folder[]    @relation("Subfolders")
   files      File[]
@@ -38,10 +38,10 @@ model Folder {
 }
 
 model File {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid())
   name      String
   path      String
-  folderId  Int
+  folderId  String
   folder    Folder   @relation(fields: [folderId], references: [id])
   size      Int
   createdAt DateTime @default(now())
@@ -50,7 +50,7 @@ model File {
 
 model ShareLink {
   id        String   @id @default(uuid())
-  folderId  Int
+  folderId  String
   expiresAt DateTime
   createdAt DateTime @default(now())
   folder    Folder   @relation(fields: [folderId], references: [id])
