@@ -4,7 +4,7 @@
   <form action="/dashboard/folders/<%= folder.id %>/update" method="post">
     <div class="mb-3">
       <label for="name" class="form-label">Name</label>
-      <input type="text" class="form-control" value="<%= formData.name %>" />
+      <input type="text" class="form-control" name="name" value="<%= formData.name %>" required/>
     </div>
     <div class="mb-3">
       <label for="parentId" class="form-label">Parent folder</label>

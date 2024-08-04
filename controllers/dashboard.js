@@ -127,10 +127,28 @@ async function handleUpdateGet(req, res) {
   }
 }
 
+async function handleUpdatePost(req, res) {
+  const { folderId } = req.params;
+  const { name, parentId } = req.body;
+
+  try {
+    const updatedFolder = await database.updateFolder(
+      +folderId,
+      name,
+      +parentId
+    );
+    res.redirect(`/dashboard/folders/${updatedFolder.id}`);
+  } catch (error) {
+    console.error("Error updating folder:", error);
+    res.status(500).redirect(`/dashboard/folders/${folderId}/update`);
+  }
+}
+
 module.exports = {
   handleDashboardGet,
   handleUploadPost,
   handleFolderGet,
   handleCreatePost,
   handleUpdateGet,
+  handleUpdatePost,
 };

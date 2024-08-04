@@ -231,6 +231,22 @@ async function findParentFolders(userId, folderId) {
   }
 }
 
+async function updateFolder(folderId, newName, newParentId) {
+  try {
+    const updatedFolder = await prisma.folder.update({
+      where: { id: folderId },
+      data: {
+        name: newName,
+        parentId: newParentId || null,
+      },
+    });
+    return updatedFolder;
+  } catch (error) {
+    console.error(`Error updating folder with ID ${folderId}:`, error);
+    throw error;
+  }
+}
+
 module.exports = {
   createUser,
   checkUsernameExists,
@@ -244,4 +260,5 @@ module.exports = {
   findHomeFolderId,
   findFolderUserId,
   findParentFolders,
+  updateFolder,
 };

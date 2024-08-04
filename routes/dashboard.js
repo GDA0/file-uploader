@@ -50,4 +50,11 @@ router.get(
   dashboardController.handleUpdateGet
 );
 
+router.post(
+  "/folders/:folderId/update",
+  checkAuthentication,
+  checkAuthentication,
+  dashboardController.handleUpdatePost
+);
+
 module.exports = router;
