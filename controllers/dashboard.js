@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const axios = require("axios");
+const crypto = require("crypto");
 
 const database = require("../utilities/database");
 const formatSize = require("../utilities/format-size");
@@ -237,6 +238,41 @@ async function handleShareGet(req, res) {
   }
 }
 
+async function handleSharePost(req, res) {
+  const { folderId } = req.params;
+  const { duration } = req.body;
+
+  function generateShareLink() {
+    return crypto.randomBytes(16).toString("hex"); // Generate a unique token
+  }
+
+  try {
+    const folder = await database.findFolder(+folderId);
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + +duration);
+
+    // Create the share link
+    const shareLinkId = generateShareLink();
+    await database.createShareLink(+folderId, expiresAt);
+
+    // Build the shareable URL dynamically
+    const protocol = req.protocol; // 'http' or 'https'
+    const host = req.get("host"); // e.g., 'yourapp.com'
+    const shareableUrl = `${protocol}://${host}/share/${shareLinkId}`;
+
+    // Render the EJS view with the generated link
+    res.render("share", {
+      title: "Share",
+      user: req.user,
+      folder,
+      shareableUrl,
+    });
+  } catch (error) {
+    console.error("Error creating share link:", error);
+    res.status(500).send("Internal server error");
+  }
+}
+
 module.exports = {
   handleDashboardGet,
   handleUploadPost,
@@ -249,4 +285,5 @@ module.exports = {
   handleFileGet,
   handleDownloadGet,
   handleShareGet,
+  handleSharePost,
 };

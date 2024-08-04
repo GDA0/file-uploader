@@ -80,5 +80,11 @@ router.get(
   checkAuthorization,
   dashboardController.handleShareGet
 );
+router.post(
+  "/folders/:folderId/share",
+  checkAuthentication,
+  checkAuthorization,
+  dashboardController.handleSharePost
+);
 
 module.exports = router;
