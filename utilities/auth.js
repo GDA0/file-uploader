@@ -10,7 +10,7 @@ function checkAuthentication(req, res, next) {
 async function checkAuthorization(req, res, next) {
   try {
     const { folderId } = req.params;
-    const userId = await database.findFolderUserId(+folderId);
+    const userId = await database.findFolderUserId(folderId);
 
     if (userId !== req.user.id) {
       return res.redirect("/dashboard");

@@ -263,6 +263,11 @@ async function deleteFolder(folderId) {
       await deleteFolder(subfolder.id);
     }
 
+    // Delete share links associated with the folder
+    await prisma.shareLink.deleteMany({
+      where: { folderId: folderId },
+    });
+
     // Delete the folder itself
     await prisma.folder.delete({
       where: { id: folderId },

@@ -1,7 +1,6 @@
 const fs = require("fs");
 const path = require("path");
 const axios = require("axios");
-const crypto = require("crypto");
 
 const database = require("../utilities/database");
 const formatSize = require("../utilities/format-size");
@@ -27,7 +26,7 @@ async function handleUploadPost(req, res) {
   try {
     const filenameExists = await database.checkFilenameExist(
       originalname,
-      +folderId
+      folderId
     );
 
     if (!filenameExists) {
@@ -37,7 +36,7 @@ async function handleUploadPost(req, res) {
       await database.createFile(
         originalname,
         result.secure_url,
-        +folderId,
+        folderId,
         size
       );
     }
@@ -54,7 +53,7 @@ async function handleUploadPost(req, res) {
 async function handleFolderGet(req, res) {
   try {
     const { folderId } = req.params;
-    const folder = await database.findFolder(+folderId);
+    const folder = await database.findFolder(folderId);
 
     // Create breadcrumb path
     let breadcrumbs = [];
@@ -104,11 +103,11 @@ async function handleCreatePost(req, res) {
 
     const foldernameExists = await database.checkFoldernameExist(
       name,
-      +folderId
+      folderId
     );
 
     if (!foldernameExists) {
-      await database.createFolder(name, req.user.id, +folderId);
+      await database.createFolder(name, req.user.id, folderId);
     }
 
     res.redirect(`/dashboard/folders/${folderId}`);
@@ -121,10 +120,10 @@ async function handleCreatePost(req, res) {
 async function handleUpdateGet(req, res) {
   try {
     const { folderId } = req.params;
-    const folder = await database.findFolder(+folderId);
+    const folder = await database.findFolder(folderId);
     const parentFolders = await database.findParentFolders(
       req.user.id,
-      +folderId
+      folderId
     );
     res.render("update", {
       title: "Update",
@@ -147,11 +146,7 @@ async function handleUpdatePost(req, res) {
   const { name, parentId } = req.body;
 
   try {
-    const updatedFolder = await database.updateFolder(
-      +folderId,
-      name,
-      +parentId
-    );
+    const updatedFolder = await database.updateFolder(folderId, name, parentId);
     res.redirect(`/dashboard/folders/${updatedFolder.id}`);
   } catch (error) {
     console.error("Error updating folder:", error);
@@ -162,7 +157,7 @@ async function handleUpdatePost(req, res) {
 async function handleDeleteGet(req, res) {
   const { folderId } = req.params;
   try {
-    const folder = await database.findFolder(+folderId);
+    const folder = await database.findFolder(folderId);
     res.render("delete", { title: "Delete", user: req.user, folder });
   } catch (error) {
     res.status(500).send("Internal server error");
@@ -173,9 +168,9 @@ async function handleDeletePost(req, res) {
   const { folderId } = req.params;
   try {
     const homeFolderId = await database.findHomeFolderId(req.user.id);
-    const folder = await database.findFolder(+folderId);
-    if (+folderId !== homeFolderId) {
-      await database.deleteFolder(+folderId);
+    const folder = await database.findFolder(folderId);
+    if (folderId !== homeFolderId) {
+      await database.deleteFolder(folderId);
     }
     res.redirect(`/dashboard/folders/${folder.parentId}`);
   } catch (error) {
@@ -187,7 +182,7 @@ async function handleDeletePost(req, res) {
 async function handleFileGet(req, res) {
   const { fileId } = req.params;
   try {
-    const file = await database.findFile(+fileId);
+    const file = await database.findFile(fileId);
 
     const formattedFile = {
       ...file,
@@ -205,7 +200,7 @@ async function handleFileGet(req, res) {
 async function handleDownloadGet(req, res) {
   const { fileId } = req.params;
   try {
-    const file = await database.findFile(+fileId);
+    const file = await database.findFile(fileId);
 
     // Use Axios to stream the file from Cloudinary
     const response = await axios.get(file.path, { responseType: "stream" });
@@ -225,7 +220,7 @@ async function handleDownloadGet(req, res) {
 async function handleShareGet(req, res) {
   const { folderId } = req.params;
   try {
-    const folder = await database.findFolder(+folderId);
+    const folder = await database.findFolder(folderId);
     res.render("share", {
       title: "Share",
       user: req.user,
@@ -243,12 +238,12 @@ async function handleSharePost(req, res) {
   const { duration } = req.body;
 
   try {
-    const folder = await database.findFolder(+folderId);
+    const folder = await database.findFolder(folderId);
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + +duration);
 
     // Create the share link
-    const shareLink = await database.createShareLink(+folderId, expiresAt);
+    const shareLink = await database.createShareLink(folderId, expiresAt);
     const shareLinkId = shareLink.id;
 
     // Build the shareable URL dynamically
