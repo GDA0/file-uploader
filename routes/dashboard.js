@@ -1,17 +1,8 @@
 const express = require("express");
 const multer = require("multer");
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "./public/uploads/");
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`);
-  },
-});
-
 const router = express.Router();
-const upload = multer({ storage });
+const upload = multer({ dest: "uploads/" });
 
 const dashboardController = require("../controllers/dashboard");
 const {
@@ -74,6 +65,13 @@ router.get(
   checkAuthentication,
   checkAuthorization,
   dashboardController.handleFileGet
+);
+
+router.get(
+  "/folders/:folderId/files/:fileId/download",
+  checkAuthentication,
+  checkAuthorization,
+  dashboardController.handleDownloadGet
 );
 
 module.exports = router;

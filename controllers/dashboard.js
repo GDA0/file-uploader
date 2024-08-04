@@ -1,6 +1,5 @@
 const database = require("../utilities/database");
 const formatSize = require("../utilities/format-size");
-const formatPath = require("../utilities/format-path");
 const sortFolderContents = require("../utilities/sort-folder-contents");
 const formatTime = require("../utilities/format-time");
 
@@ -18,7 +17,6 @@ async function handleUploadPost(req, res) {
   try {
     const { originalname, path, size } = req.file;
     const { folderId } = req.params;
-    const formattedPath = formatPath(path);
 
     const filenameExists = await database.checkFilenameExist(
       originalname,
@@ -26,7 +24,7 @@ async function handleUploadPost(req, res) {
     );
 
     if (!filenameExists) {
-      await database.createFile(originalname, formattedPath, +folderId, size);
+      await database.createFile(originalname, path, +folderId, size);
     }
 
     res.redirect(`/dashboard/folders/${folderId}`);
@@ -187,6 +185,18 @@ async function handleFileGet(req, res) {
   }
 }
 
+async function handleDownloadGet(req, res) {
+  const { fileId } = req.params;
+  try {
+    const file = await database.findFile(+fileId);
+
+    res.download(file.path, file.name);
+  } catch (error) {
+    console.error("Error downloading file:", error);
+    res.redirect(`/dashboard/folders/${file.folderId}`);
+  }
+}
+
 module.exports = {
   handleDashboardGet,
   handleUploadPost,
@@ -197,4 +207,5 @@ module.exports = {
   handleDeleteGet,
   handleDeletePost,
   handleFileGet,
+  handleDownloadGet,
 };
