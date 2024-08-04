@@ -49,12 +49,18 @@ router.get(
   checkAuthentication,
   dashboardController.handleUpdateGet
 );
-
 router.post(
   "/folders/:folderId/update",
   checkAuthentication,
   checkAuthentication,
   dashboardController.handleUpdatePost
+);
+
+router.get(
+  "/folders/:folderId/delete",
+  checkAuthentication,
+  checkAuthorization,
+  dashboardController.handleDeleteGet
 );
 
 module.exports = router;

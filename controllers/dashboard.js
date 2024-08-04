@@ -144,6 +144,14 @@ async function handleUpdatePost(req, res) {
   }
 }
 
+async function handleDeleteGet(req, res) {
+  const { folderId } = req.params;
+  try {
+    const folder = await database.findFolder(+folderId);
+    res.render("delete", { title: "Delete", user: req.user, folder });
+  } catch (error) {}
+}
+
 module.exports = {
   handleDashboardGet,
   handleUploadPost,
@@ -151,4 +159,5 @@ module.exports = {
   handleCreatePost,
   handleUpdateGet,
   handleUpdatePost,
+  handleDeleteGet,
 };
