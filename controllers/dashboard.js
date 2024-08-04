@@ -242,18 +242,14 @@ async function handleSharePost(req, res) {
   const { folderId } = req.params;
   const { duration } = req.body;
 
-  function generateShareLink() {
-    return crypto.randomBytes(16).toString("hex"); // Generate a unique token
-  }
-
   try {
     const folder = await database.findFolder(+folderId);
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + +duration);
 
     // Create the share link
-    const shareLinkId = generateShareLink();
-    await database.createShareLink(+folderId, expiresAt);
+    const shareLink = await database.createShareLink(+folderId, expiresAt);
+    const shareLinkId = shareLink.id;
 
     // Build the shareable URL dynamically
     const protocol = req.protocol; // 'http' or 'https'

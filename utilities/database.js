@@ -288,14 +288,29 @@ async function findFile(fileId) {
 
 async function createShareLink(folderId, expiresAt) {
   try {
-    await prisma.shareLink.create({
+    const shareLink = await prisma.shareLink.create({
       data: {
         folderId,
         expiresAt,
       },
     });
+
+    return shareLink;
   } catch (error) {
     console.error("Error creating share link:", error);
+    throw error;
+  }
+}
+
+async function findShareLink(shareLinkId) {
+  try {
+    const shareLink = await prisma.shareLink.findUnique({
+      where: { id: shareLinkId },
+    });
+
+    return shareLink;
+  } catch (error) {
+    console.error("Error finding share link:", error);
     throw error;
   }
 }
@@ -317,4 +332,5 @@ module.exports = {
   deleteFolder,
   findFile,
   createShareLink,
+  findShareLink,
 };

@@ -1,0 +1,31 @@
+<% layout('layout') %>
+
+<div class="mx-auto">
+  <h5><%= folder.name %></h5>
+
+  <% if (folder.subfolders.length || folder.files.length) { %>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>File size</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% folder.subfolders.forEach(subfolder => { %>
+      <tr>
+        <td><i class="bi bi-folder me-1"></i><%= subfolder.name %></td>
+        <td>-</td>
+      </tr>
+      <% }); %> <% folder.files.forEach(file => { %>
+      <tr>
+        <td><i class="bi bi-file-earmark me-1"></i><%= file.name %></td>
+        <td><%= file.formattedSize %></td>
+      </tr>
+      <% }); %>
+    </tbody>
+  </table>
+  <% } else { %>
+  <p>No contents available.</p>
+  <% } %>
+</div>
