@@ -1,0 +1,20 @@
+<% layout('layout') %>
+
+<div class="container">
+  <h5>File Details</h5>
+  <div class="my-3">
+    <div><b>Name:</b> <%= file.name %></div>
+    <div><b>Size:</b> <%= file.formattedSize %></div>
+    <div><b>Uploaded at:</b> <%= file.formattedCreatedAt %></div>
+  </div>
+  <div>
+    <a class="btn btn-secondary" href="/dashboard/folders/<%= file.folderId %>"
+      >Back to Folder</a
+    >
+    <a
+      class="btn btn-primary"
+      href="/dashboard/folders/<%= file.folderId %>/files/<%= file.id %>/download"
+      >Download</a
+    >
+  </div>
+</div>

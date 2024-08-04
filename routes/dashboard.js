@@ -69,4 +69,11 @@ router.post(
   dashboardController.handleDeletePost
 );
 
+router.get(
+  "/folders/:folderId/files/:fileId",
+  checkAuthentication,
+  checkAuthorization,
+  dashboardController.handleFileGet
+);
+
 module.exports = router;

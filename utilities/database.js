@@ -273,6 +273,19 @@ async function deleteFolder(folderId) {
   }
 }
 
+async function findFile(fileId) {
+  try {
+    const file = await prisma.file.findUnique({
+      where: { id: fileId },
+    });
+
+    return file;
+  } catch (error) {
+    console.error("Error finding file:", error);
+    throw error;
+  }
+}
+
 module.exports = {
   createUser,
   checkUsernameExists,
@@ -288,4 +301,5 @@ module.exports = {
   findParentFolders,
   updateFolder,
   deleteFolder,
+  findFile,
 };

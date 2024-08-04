@@ -65,7 +65,9 @@
           <a href="/dashboard/folders/<%= folder.id %>/update">Update</a>
         </li>
         <li class="breadcrumb-item">
-          <a class="text-danger" href="/dashboard/folders/<%= folder.id %>/delete">Delete</a>
+          <a
+            class="text-danger"
+            href="/dashboard/folders/<%= folder.id %>/delete">Delete</a>
         </li>
       </ol>
       <% } %>
@@ -96,7 +98,7 @@
         <% }); %> <% folder.files.forEach(file => { %>
         <tr>
           <td>
-            <a href="/dashboard/files/<%= file.id %>">
+            <a href="/dashboard/folders/<%= folder.id %>/files/<%= file.id %>">
               <i class="bi bi-file-earmark me-1"></i><%= file.name %>
             </a>
           </td>

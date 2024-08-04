@@ -2,7 +2,7 @@ const database = require("../utilities/database");
 const formatSize = require("../utilities/format-size");
 const formatPath = require("../utilities/format-path");
 const sortFolderContents = require("../utilities/sort-folder-contents");
-const formatUpdatedAt = require("../utilities/format-updatedAt");
+const formatTime = require("../utilities/format-time");
 
 async function handleDashboardGet(req, res) {
   try {
@@ -57,14 +57,14 @@ async function handleFolderGet(req, res) {
       folder.files = folder.files.map((file) => ({
         ...file,
         formattedSize: formatSize(file.size),
-        formattedUpdatedAt: formatUpdatedAt(file.updatedAt),
+        formattedUpdatedAt: formatTime(file.updatedAt),
       }));
     }
 
     if (folder.subfolders.length) {
       folder.subfolders = folder.subfolders.map((subfolder) => ({
         ...subfolder,
-        formattedUpdatedAt: formatUpdatedAt(subfolder.updatedAt),
+        formattedUpdatedAt: formatTime(subfolder.updatedAt),
       }));
     }
 
@@ -169,6 +169,24 @@ async function handleDeletePost(req, res) {
   }
 }
 
+async function handleFileGet(req, res) {
+  const { fileId } = req.params;
+  try {
+    const file = await database.findFile(+fileId);
+
+    const formattedFile = {
+      ...file,
+      formattedSize: formatSize(file.size),
+      formattedCreatedAt: formatTime(file.createdAt),
+    };
+
+    res.render("file", { title: "File", user: req.user, file: formattedFile });
+  } catch (error) {
+    console.error("Error finding file:", error);
+    res.redirect(`/dashboard/folders/${file.folderId}`);
+  }
+}
+
 module.exports = {
   handleDashboardGet,
   handleUploadPost,
@@ -178,4 +196,5 @@ module.exports = {
   handleUpdatePost,
   handleDeleteGet,
   handleDeletePost,
+  handleFileGet,
 };
