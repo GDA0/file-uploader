@@ -1,7 +1,12 @@
+const fs = require("fs");
+const path = require("path");
+const axios = require("axios");
+
 const database = require("../utilities/database");
 const formatSize = require("../utilities/format-size");
 const sortFolderContents = require("../utilities/sort-folder-contents");
 const formatTime = require("../utilities/format-time");
+const cloudinary = require("../utilities/configure-cloudinary");
 
 async function handleDashboardGet(req, res) {
   try {
@@ -14,18 +19,29 @@ async function handleDashboardGet(req, res) {
 }
 
 async function handleUploadPost(req, res) {
-  try {
-    const { originalname, path, size } = req.file;
-    const { folderId } = req.params;
+  const { folderId } = req.params;
+  const filePath = path.join(__dirname, "..", req.file.path);
+  const { originalname, size } = req.file;
 
+  try {
     const filenameExists = await database.checkFilenameExist(
       originalname,
       +folderId
     );
 
     if (!filenameExists) {
-      await database.createFile(originalname, path, +folderId, size);
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        resource_type: "auto",
+      });
+      await database.createFile(
+        originalname,
+        result.secure_url,
+        +folderId,
+        size
+      );
     }
+
+    fs.unlinkSync(filePath);
 
     res.redirect(`/dashboard/folders/${folderId}`);
   } catch (error) {
@@ -190,7 +206,15 @@ async function handleDownloadGet(req, res) {
   try {
     const file = await database.findFile(+fileId);
 
-    res.download(file.path, file.name);
+    // Use Axios to stream the file from Cloudinary
+    const response = await axios.get(file.path, { responseType: "stream" });
+
+    // Set headers for file download
+    res.setHeader("Content-Disposition", `attachment; filename="${file.name}"`);
+    res.setHeader("Content-Type", response.headers["content-type"]);
+
+    // Stream the file to the response
+    response.data.pipe(res);
   } catch (error) {
     console.error("Error downloading file:", error);
     res.redirect(`/dashboard/folders/${file.folderId}`);
