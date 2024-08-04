@@ -103,9 +103,21 @@ async function handleCreatePost(req, res) {
   }
 }
 
+async function handleUpdateGet(req, res) {
+  try {
+    const { folderId } = req.params;
+    const folder = await database.findFolder(+folderId);
+    res.render("update", { title: "Update", user: req.user, folder });
+  } catch (error) {
+    console.error("Error updating folder:", error);
+    res.status(500).send("Internal Server Error");
+  }
+}
+
 module.exports = {
   handleDashboardGet,
   handleUploadPost,
   handleFolderGet,
   handleCreatePost,
+  handleUpdateGet,
 };
