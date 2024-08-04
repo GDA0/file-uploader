@@ -1,0 +1,30 @@
+<% layout('layout') %>
+
+<div class="mx-auto" style="max-width: 540px">
+  <h3>Share "<%= folder.name %>"</h3>
+
+  <form action="/dashboard/folders/<%= folder.id %>/share" method="post">
+    <div class="mb-3">
+      <label for="duration" class="form-label">Duration (in days)</label>
+      <input
+        type="number"
+        class="form-control"
+        id="duration"
+        name="duration"
+        min="1"
+        autofocus
+        required
+      />
+    </div>
+    <button class="btn btn-primary" type="submit">Share Folder</button>
+  </form>
+
+  <% if (shareableUrl) { %>
+  <p>
+    Shareable Link:
+    <a href="<%= shareableUrl %>" target="_blank" rel="noreferrer noopener"
+      ><%= shareableUrl %></a
+    >
+  </p>
+  <% } %>
+</div>

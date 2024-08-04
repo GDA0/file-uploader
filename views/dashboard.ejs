@@ -59,18 +59,23 @@
         </ol>
       </nav>
 
-      <% if (folder.parentId) { %>
       <ol class="breadcrumb ms-auto">
+        <li class="breadcrumb-item">
+          <a href="/dashboard/folders/<%= folder.id %>/share">Share</a>
+        </li>
+        <% if (folder.parentId) { %>
         <li class="breadcrumb-item">
           <a href="/dashboard/folders/<%= folder.id %>/update">Update</a>
         </li>
         <li class="breadcrumb-item">
           <a
             class="text-danger"
-            href="/dashboard/folders/<%= folder.id %>/delete">Delete</a>
+            href="/dashboard/folders/<%= folder.id %>/delete"
+            >Delete</a
+          >
         </li>
+        <% } %>
       </ol>
-      <% } %>
     </div>
 
     <h5><%= folder.name %></h5>

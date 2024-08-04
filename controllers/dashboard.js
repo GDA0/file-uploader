@@ -221,6 +221,22 @@ async function handleDownloadGet(req, res) {
   }
 }
 
+async function handleShareGet(req, res) {
+  const { folderId } = req.params;
+  try {
+    const folder = await database.findFolder(+folderId);
+    res.render("share", {
+      title: "Share",
+      user: req.user,
+      folder,
+      shareableUrl: "",
+    });
+  } catch (error) {
+    console.error("Error finding file:", error);
+    res.redirect(`/dashboard/folders/${folderId}`);
+  }
+}
+
 module.exports = {
   handleDashboardGet,
   handleUploadPost,
@@ -232,4 +248,5 @@ module.exports = {
   handleDeletePost,
   handleFileGet,
   handleDownloadGet,
+  handleShareGet,
 };

@@ -74,4 +74,11 @@ router.get(
   dashboardController.handleDownloadGet
 );
 
+router.get(
+  "/folders/:folderId/share",
+  checkAuthentication,
+  checkAuthorization,
+  dashboardController.handleShareGet
+);
+
 module.exports = router;
