@@ -247,6 +247,32 @@ async function updateFolder(folderId, newName, newParentId) {
   }
 }
 
+async function deleteFolder(folderId) {
+  try {
+    // Delete files in the folder
+    await prisma.file.deleteMany({
+      where: { folderId: folderId },
+    });
+
+    // Find and delete subfolders recursively
+    const subfolders = await prisma.folder.findMany({
+      where: { parentId: folderId },
+    });
+
+    for (const subfolder of subfolders) {
+      await deleteFolder(subfolder.id);
+    }
+
+    // Delete the folder itself
+    await prisma.folder.delete({
+      where: { id: folderId },
+    });
+  } catch (error) {
+    console.error(`Error deleting folder with ID ${folderId}:`, error);
+    throw error;
+  }
+}
+
 module.exports = {
   createUser,
   checkUsernameExists,
@@ -261,4 +287,5 @@ module.exports = {
   findFolderUserId,
   findParentFolders,
   updateFolder,
+  deleteFolder,
 };

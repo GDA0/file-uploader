@@ -149,7 +149,24 @@ async function handleDeleteGet(req, res) {
   try {
     const folder = await database.findFolder(+folderId);
     res.render("delete", { title: "Delete", user: req.user, folder });
-  } catch (error) {}
+  } catch (error) {
+    res.status(500).send("Internal server error");
+  }
+}
+
+async function handleDeletePost(req, res) {
+  const { folderId } = req.params;
+  try {
+    const homeFolderId = await database.findHomeFolderId(req.user.id);
+    const folder = await database.findFolder(+folderId);
+    if (+folderId !== homeFolderId) {
+      await database.deleteFolder(+folderId);
+    }
+    res.redirect(`/dashboard/folders/${folder.parentId}`);
+  } catch (error) {
+    console.error("Error deleting folder:", error);
+    res.status(500).redirect("/dashboard");
+  }
 }
 
 module.exports = {
@@ -160,4 +177,5 @@ module.exports = {
   handleUpdateGet,
   handleUpdatePost,
   handleDeleteGet,
+  handleDeletePost,
 };

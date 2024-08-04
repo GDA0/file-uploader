@@ -62,5 +62,11 @@ router.get(
   checkAuthorization,
   dashboardController.handleDeleteGet
 );
+router.post(
+  "/folders/:folderId/delete",
+  checkAuthentication,
+  checkAuthorization,
+  dashboardController.handleDeletePost
+);
 
 module.exports = router;
