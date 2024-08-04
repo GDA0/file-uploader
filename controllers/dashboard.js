@@ -107,7 +107,20 @@ async function handleUpdateGet(req, res) {
   try {
     const { folderId } = req.params;
     const folder = await database.findFolder(+folderId);
-    res.render("update", { title: "Update", user: req.user, folder });
+    const parentFolders = await database.findParentFolders(
+      req.user.id,
+      +folderId
+    );
+    res.render("update", {
+      title: "Update",
+      user: req.user,
+      formData: {
+        name: folder.name,
+        parentId: folder.parentId,
+      },
+      folder,
+      parentFolders,
+    });
   } catch (error) {
     console.error("Error updating folder:", error);
     res.status(500).send("Internal Server Error");

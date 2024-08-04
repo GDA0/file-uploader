@@ -4,7 +4,15 @@
   <form action="/dashboard/folders/<%= folder.id %>/update" method="post">
     <div class="mb-3">
       <label for="name" class="form-label">Name</label>
-      <input type="text" class="form-control" value="<%= folder.name %>" />
+      <input type="text" class="form-control" value="<%= formData.name %>" />
+    </div>
+    <div class="mb-3">
+      <label for="parentId" class="form-label">Parent folder</label>
+      <select name="parentId" id="parentId" class="form-select">
+        <% parentFolders.forEach(parentFolder=> { %>
+        <option value="<%= parentFolder.id %>" <%= parentFolder.id === formData.parentId ? 'selected' : '' %>><%= parentFolder.name %></option>
+        <% }) %>
+      </select>
     </div>
     <a class="btn btn-secondary" href="/dashboard/folders/<%= folder.id %>"
       >Cancel</a

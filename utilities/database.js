@@ -194,6 +194,43 @@ async function findFolderUserId(folderId) {
   }
 }
 
+async function findDescendantFolders(folderId) {
+  const descendants = [];
+
+  async function findChildren(parentId) {
+    const subfolders = await prisma.folder.findMany({
+      where: { parentId },
+    });
+
+    for (const subfolder of subfolders) {
+      descendants.push(subfolder.id);
+      await findChildren(subfolder.id);
+    }
+  }
+
+  await findChildren(folderId);
+  return descendants;
+}
+
+async function findParentFolders(userId, folderId) {
+  try {
+    const descendants = await findDescendantFolders(folderId);
+    descendants.push(folderId);
+
+    const folders = await prisma.folder.findMany({
+      where: {
+        userId,
+        id: { notIn: descendants },
+      },
+    });
+
+    return folders;
+  } catch (error) {
+    console.error("Error fetching parent folders:", error);
+    throw error;
+  }
+}
+
 module.exports = {
   createUser,
   checkUsernameExists,
@@ -206,4 +243,5 @@ module.exports = {
   checkFoldernameExist,
   findHomeFolderId,
   findFolderUserId,
+  findParentFolders,
 };
