@@ -1,11 +1,11 @@
-const cloudinary = require("cloudinary").v2;
-require("dotenv").config();
+const cloudinary = require('cloudinary').v2
+require('dotenv').config()
 
 cloudinary.config({
-  cloud_name: "dqtvnotyf",
+  cloud_name: 'dqtvnotyf',
   api_key: process.env.API_KEY,
   api_secret: process.env.API_SECRET,
-  secure: true,
-});
+  secure: true
+})
 
-module.exports = cloudinary;
+module.exports = cloudinary

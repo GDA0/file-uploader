@@ -1,135 +1,135 @@
-const { body, validationResult } = require("express-validator");
-const bcrypt = require("bcryptjs");
-const database = require("../utilities/database");
+const { body, validationResult } = require('express-validator')
+const bcrypt = require('bcryptjs')
+const database = require('../utilities/database')
 
-function controlSignUpGet(req, res) {
-  res.render("sign-up", {
-    title: "Sign up",
+function controlSignUpGet (req, res) {
+  res.render('sign-up', {
+    title: 'Sign up',
     user: null,
     errors: [],
-    formData: {},
-  });
+    formData: {}
+  })
 }
 
 const controlSignUpPost = [
-  body("firstName")
+  body('firstName')
     .trim()
     .notEmpty()
-    .withMessage("First name is required")
+    .withMessage('First name is required')
     .escape(),
-  body("lastName")
+  body('lastName')
     .trim()
     .notEmpty()
-    .withMessage("Last name is required")
+    .withMessage('Last name is required')
     .escape(),
-  body("username")
+  body('username')
     .trim()
     .notEmpty()
-    .withMessage("Username is required")
+    .withMessage('Username is required')
     .isLength({ min: 3, max: 20 })
-    .withMessage("Username must be between 3 and 20 characters long")
+    .withMessage('Username must be between 3 and 20 characters long')
     .matches(/^[a-zA-Z0-9_.]+$/)
     .withMessage(
-      "Username can only contain letters, numbers, underscores, or periods"
+      'Username can only contain letters, numbers, underscores, or periods'
     )
     .escape(),
-  body("password")
+  body('password')
     .notEmpty()
-    .withMessage("Password is required")
+    .withMessage('Password is required')
     .isLength({ min: 8, max: 64 })
-    .withMessage("Password must be between 8 and 64 characters long")
+    .withMessage('Password must be between 8 and 64 characters long')
     .matches(/[A-Z]/)
-    .withMessage("Password must contain at least one uppercase letter")
+    .withMessage('Password must contain at least one uppercase letter')
     .matches(/[a-z]/)
-    .withMessage("Password must contain at least one lowercase letter")
+    .withMessage('Password must contain at least one lowercase letter')
     .matches(/[0-9]/)
-    .withMessage("Password must contain at least one number"),
-  body("confirmPassword")
+    .withMessage('Password must contain at least one number'),
+  body('confirmPassword')
     .custom((value, { req }) => value === req.body.password)
-    .withMessage("Passwords do not match"),
+    .withMessage('Passwords do not match'),
 
   async (req, res) => {
-    const errors = validationResult(req);
+    const errors = validationResult(req)
     if (!errors.isEmpty()) {
-      return res.render("sign-up", {
-        title: "Sign up",
+      return res.render('sign-up', {
+        title: 'Sign up',
         user: null,
         errors: errors.array(),
-        formData: req.body,
-      });
+        formData: req.body
+      })
     }
 
     try {
-      const { firstName, lastName, username, password } = req.body;
-      const usernameExists = await database.checkUsernameExists(username);
+      const { firstName, lastName, username, password } = req.body
+      const usernameExists = await database.checkUsernameExists(username)
 
       if (usernameExists) {
-        return res.render("sign-up", {
-          title: "Sign up",
+        return res.render('sign-up', {
+          title: 'Sign up',
           user: null,
-          errors: [{ msg: "Username is already taken" }],
-          formData: req.body,
-        });
+          errors: [{ msg: 'Username is already taken' }],
+          formData: req.body
+        })
       }
 
-      const hashedPassword = await bcrypt.hash(password, 10);
+      const hashedPassword = await bcrypt.hash(password, 10)
 
       const user = await database.createUser(
         firstName,
         lastName,
         username,
         hashedPassword
-      );
+      )
 
       // Create a default folder for new users
-      await database.createHomeFolder(user.id);
+      await database.createHomeFolder(user.id)
 
       req.login(user, (error) => {
         if (error) {
-          console.error("Error during auto login:", error);
-          return res.render("sign-up", {
-            title: "Sign up",
+          console.error('Error during auto login:', error)
+          return res.render('sign-up', {
+            title: 'Sign up',
             user: null,
             errors: [
               {
-                msg: "Sign-up successful, but an error occurred during auto login. Please log in manually.",
-              },
+                msg: 'Sign-up successful, but an error occurred during auto login. Please log in manually.'
+              }
             ],
-            formData: req.body,
-          });
+            formData: req.body
+          })
         }
-        return res.redirect("/");
-      });
+        return res.redirect('/')
+      })
     } catch (error) {
-      console.error("Error during user sign-up:", error);
-      return res.render("sign-up", {
-        title: "Sign up",
+      console.error('Error during user sign-up:', error)
+      return res.render('sign-up', {
+        title: 'Sign up',
         user: null,
         errors: [
-          { msg: "An error occurred during sign-up. Please try again later." },
+          { msg: 'An error occurred during sign-up. Please try again later.' }
         ],
-        formData: req.body,
-      });
+        formData: req.body
+      })
     }
-  },
-];
+  }
+]
 
-function controlLogInGet(req, res) {
-  res.render("log-in", { title: "Log in", user: null });
+function controlLogInGet (req, res) {
+  res.render('log-in', { title: 'Log in', user: null })
 }
 
-function controlLogOutGet(req, res) {
+function controlLogOutGet (req, res, next) {
   req.logout((error) => {
     if (error) {
-      return next(error);
+      return next(error)
     }
-    res.redirect("/");
-  });
+    res.redirect('/')
+  })
 }
 
 module.exports = {
   controlSignUpGet,
   controlSignUpPost,
   controlLogInGet,
-  controlLogOutGet,
-};
+  controlLogOutGet
+}
