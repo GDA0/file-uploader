@@ -38,12 +38,7 @@ app.use(
     }),
     secret: process.env.SESSION_SECRET,
     resave: false, // Avoid resaving sessions that haven't been modified
-    saveUninitialized: false, // Only save sessions that are initialized
-    cookie: {
-      maxAge: 24 * 60 * 60 * 1000, // Session cookie expires in 1 day
-      secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
-      httpOnly: true // Prevent client-side JavaScript from accessing cookies
-    }
+    saveUninitialized: false // Only save sessions that are initialized
   })
 )
 app.use(passport.session())
